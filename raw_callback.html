@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <div id="name"></div>
+        <h1>Access Token</h1>
+        <script>
+            var at = location.href.match('access_token=(.+?)&')[1]; 
+            document.write(at);  
+            // https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=ya29.GlwJBxwk3GMlEfOcZPyoKGrcjrrwMMqUrJSSooWU1m2ZtGcvYL6a6cEE8-uU-TQqKcH-98-OgZy6m6LvlOR7QXl-EyBJ4twUCvWObcfsFIUXPodEOQhP9e7hyW9K4Q 접속해서 결과를 받아온 다음에 웹페이지에 표시해!
+
+            fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=ya29.GlwJBxwk3GMlEfOcZPyoKGrcjrrwMMqUrJSSooWU1m2ZtGcvYL6a6cEE8-uU-TQqKcH-98-OgZy6m6LvlOR7QXl-EyBJ4twUCvWObcfsFIUXPodEOQhP9e7hyW9K4Q')
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(result){
+                    document.querySelector('#name').innerHTML = result.name;
+                })
+        </script>
+    </body>
+</html>
