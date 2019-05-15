@@ -1,6 +1,7 @@
 <html>
     <body>
         <div id="name"></div>
+        <select id="cals"></select>
         <h1>Access Token</h1>
         <script>
             var at = location.href.match('access_token=(.+?)&')[1]; 
@@ -14,6 +15,18 @@
                 .then(function(result){
                     document.querySelector('#name').innerHTML = result.name;
                 })
+            fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token='+at)
+                .then(function(res){
+                    return res.json();
+                })
+                .then(function(result){
+                    var tag = '';
+                    for(var i = 0; i < result.items.length; i++){
+                        tag = tag + '<option>'+result.items[i].summary+'</option>';
+                    }
+                    document.querySelector('#cals').innerHTML = tag;
+                })
+
         </script>
     </body>
 </html>
