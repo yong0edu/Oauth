@@ -5,6 +5,8 @@
           // Load the API's client and auth2 modules.
           // Call the initClient function after the modules load.
           // client lib 와 oauth2 lib를 다운로드 한 후에 initClinet 함수를 실행해주세요. 
+          // gapi.load는 구글 API 의 데이터는 방대하기 때문에, client library와 oauth library를 우선적으로 다운로드 해준다.
+        //   그 다음 initClient 함수를 실행한다.
 
           gapi.load('client:auth2', initClient);
         }
@@ -17,14 +19,18 @@
           // Initialize the gapi.client object, which app uses to make API requests.
           // Get API key and client ID from API Console.
           // 'scope' field specifies space-delimited list of access scopes.
+        //   초기화 하는 함수로, clientId를 입력하고 Scope은 위에서 calendar api 주소를 담은 SCOPE을 적는다.
+        //   API key는 OAuth처럼 자동화 된 시스템이 아닌, 그 때 그 때 API key를 받아 사용하는 것으로 보안상 취약하다. 지워라.
           gapi.client.init({
               'discoveryDocs': [discoveryUrl],
               'clientId': '1086852003792-q2qp4q1ed2rangod2a1a1vob9thicq7b.apps.googleusercontent.com',
               'scope': SCOPE
           }).then(function () {
             GoogleAuth = gapi.auth2.getAuthInstance();
+            // getAuthInstance()함수를 통해 인증과 관련된 객체들을 받아와 GoogleAuth에 담고,
       
             // Listen for sign-in state changes.
+            // 로그인 상태가 바뀔때마다, updateSigninStatus() 함수를 호출하여 상태를 변경해주자.
             GoogleAuth.isSignedIn.listen(updateSigninStatus);
       
             // Handle initial sign-in state. (Determine if user is already signed in.)
@@ -56,6 +62,8 @@
           GoogleAuth.disconnect();
         }
       
+    // setsigninstatus()함수는 사용자의 프로필 정보를 담고 있는 객체를 내려주면 이를 user에 담고, 
+    // scope 을 분석하여 Access Token을 검사하고 인증이 안됐으면(false) signout을  인증이 됐으면(true)면 처리해줘라. 
         function setSigninStatus(isSignedIn) {
           var user = GoogleAuth.currentUser.get();
           var isAuthorized = user.hasGrantedScopes(SCOPE);
@@ -86,6 +94,8 @@
       
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <!-- google lib download 후에 handleClientLoad 함수를 실행해라!-->
+      <!-- Onload 이벤트는 src의 소스를 가져온 다음에 실행하기로 약속된 이벤트이다.
+      즉, google lib를 다운로드 하고, handleClientLoad 함수를 실행해라라는 뜻. -->
 
       <script async defer src="https://apis.google.com/js/api.js" 
               onload="this.onload=function(){};handleClientLoad()" 
